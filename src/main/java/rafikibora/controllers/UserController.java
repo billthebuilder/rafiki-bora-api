@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.ListSystemUser;
+import rafikibora.dto.UserDto;
 import rafikibora.dto.SystemUser;
 import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.TerminalToAgentResponse;
@@ -51,9 +52,10 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Missing role or invalid request",
                     content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<?> addUser(@RequestBody @Parameter(description = "User payload") User user){
-        if(user.getRole() == null)
+    public ResponseEntity<?> addUser(@RequestBody @Parameter(description = "User payload") UserDto userDto){
+        if(userDto.getRole() == null)
             throw new BadRequestException("User has to have an assigned role");
+        User user = dtoToUser(userDto);
         userServiceI.addUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -132,7 +134,8 @@ public class UserController {
 
     @PostMapping("/addagent")
     @Operation(summary = "Add agent", description = "Create a new agent user")
-    public void addAgent (@RequestBody @Parameter(description = "Agent user payload") User user){
+    public void addAgent (@RequestBody @Parameter(description = "Agent user payload") UserDto userDto){
+         User user = dtoToUser(userDto);
          userServiceI.addAgent(user);
     }
 
@@ -148,7 +151,8 @@ public class UserController {
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
     @Operation(summary = "Update user", description = "Update an existing user by id")
-    public ResponseEntity<?> updateAccount(@RequestBody @Parameter(description = "Updated user payload") User user, @PathVariable @Parameter(description = "User id") int id) {
+    public ResponseEntity<?> updateAccount(@RequestBody @Parameter(description = "Updated user payload") UserDto userDto, @PathVariable @Parameter(description = "User id") int id) {
+        User user = dtoToUser(userDto);
         userServiceI.updateUser(user, id);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -179,6 +183,19 @@ public class UserController {
 
     private ListSystemUser buildUserListJson(List<User> users){
         return new ListSystemUser(users.stream().map(user -> new SystemUser(user)).collect(Collectors.toList()));
+    }
+
+    private User dtoToUser(UserDto dto) {
+        if (dto == null) return null;
+        User u = new User();
+        u.setFirstName(dto.getFirstName());
+        u.setLastName(dto.getLastName());
+        u.setEmail(dto.getEmail());
+        u.setUsername(dto.getEmail());
+        u.setPhoneNo(dto.getPhoneNo());
+        u.setPassword(dto.getPassword());
+        u.setRole(dto.getRole());
+        return u;
     }
 
 }
