@@ -3,21 +3,20 @@ package rafikibora.model.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import lombok.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLUpdate;
-import org.hibernate.annotations.Where;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.transactions.Transaction;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
-@ApiModel(value = "User", description="Accunts record")
 @Getter
 @Setter
 @AllArgsConstructor

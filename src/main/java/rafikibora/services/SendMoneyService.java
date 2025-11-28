@@ -2,10 +2,8 @@ package rafikibora.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rafikibora.exceptions.RafikiBoraException;
 import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
@@ -15,14 +13,13 @@ import rafikibora.repository.AccountRepository;
 import rafikibora.repository.TerminalRepository;
 import rafikibora.repository.TransactionRepository;
 import rafikibora.repository.UserRepository;
+import rafikibora.handlers.LogUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class includes functionality to send money to someone.
@@ -53,7 +50,7 @@ public class SendMoneyService {
     @Transactional
     public boolean sendMoney(Transaction sendMoneyData) {
 
-        System.out.println("###############################: Send Money Data: " + sendMoneyData);
+        log.info("Send Money request: {}", sendMoneyData);
         // Get required fields
         String merchantPan = sendMoneyData.getPan(); // 2
         String processingCode = sendMoneyData.getProcessingCode(); // 3
@@ -69,7 +66,7 @@ public class SendMoneyService {
         Date date = null;
         try {
             date = parseDateTime(dateTime);
-            System.out.println("=============================== " + dateTime);
+            log.debug("Parsed date time from request: {}", dateTime);
         } catch (ParseException | IndexOutOfBoundsException ex) {
             log.warn("Date could not be parsed: " + ex.getMessage());
         }
@@ -93,8 +90,8 @@ public class SendMoneyService {
             transactionRepository.save(sendMoneyData);
             emailService.sendEmail(emailOfRecipient, recipientToken);
         } catch (Exception ex) {
-            log.error("Error sending money: " + ex.getMessage());
-            ex.printStackTrace();
+            log.error("Error sending money: {}", ex.getMessage());
+            LogUtil.logException(log, "Stacktrace for send money failure", ex);
             return false;
             //throw new RafikiBoraException("Error sending money: " + ex.getMessage());
         }

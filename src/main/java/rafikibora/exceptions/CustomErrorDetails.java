@@ -1,6 +1,7 @@
 package rafikibora.exceptions;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.WebRequest;
@@ -19,12 +20,11 @@ public class CustomErrorDetails
     @Override
     public Map<String, Object> getErrorAttributes(
             WebRequest webRequest,
-            boolean includeStackTrace)
+            ErrorAttributeOptions options)
     {
-
-        /** Get all the normal error information */
+        // Get all the normal error information using Spring Boot 3 signature
         Map<String, Object> errorAttributes =
-                super.getErrorAttributes(webRequest, includeStackTrace);
+                super.getErrorAttributes(webRequest, options);
         /** Linked HashMaps maintain the order the items are inserted.
          * They are used here so that the error JSON produced from this class
          * lists the attributes in the same order as other classes.

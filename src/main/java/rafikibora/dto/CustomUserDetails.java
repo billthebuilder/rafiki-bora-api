@@ -1,16 +1,13 @@
 package rafikibora.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import rafikibora.model.users.Role;
-import rafikibora.model.users.User;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import rafikibora.model.users.User;
 import rafikibora.model.users.UserRoles;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 

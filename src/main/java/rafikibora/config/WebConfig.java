@@ -7,29 +7,23 @@ package rafikibora.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
 *
 * @author bkariuki
 */
 @Configuration
-@EnableWebMvc
-public class WebConfig extends WebMvcConfigurerAdapter implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
 @Override
 public void addCorsMappings(CorsRegistry registry) {
 registry.addMapping("/**").allowedOrigins("*");
 }
 
-@Override
-public void addResourceHandlers(ResourceHandlerRegistry registry) {
-registry.addResourceHandler("swagger-ui.html")
-.addResourceLocations("classpath:/META-INF/resources/swagger-ui.html");
-registry.addResourceHandler("/webjars/**")
-.addResourceLocations("classpath:/META-INF/resources/webjars/");
-super.addResourceHandlers(registry);
-}
+// Static resources for Swagger UI are auto-configured by springdoc-openapi in Spring Boot 3+.
 
 @Override
 public void configureContentNegotiation(final ContentNegotiationConfigurer configurer) {

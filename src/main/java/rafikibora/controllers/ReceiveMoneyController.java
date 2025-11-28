@@ -1,6 +1,7 @@
 package rafikibora.controllers;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,12 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import rafikibora.dto.ReceiveMoneyRequestDto;
 import rafikibora.dto.ReceiveMoneyResponseDto;
 import rafikibora.services.ReceiveMoneyService;
-
-import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import rafikibora.handlers.LogUtil;
 
 
 @RestController
 @RequestMapping("/api/transactions/receive_money")
+@Slf4j
 public class ReceiveMoneyController {
 
     @Autowired
@@ -23,24 +25,14 @@ public class ReceiveMoneyController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ReceiveMoneyResponseDto receiveMoneyTransaction(@RequestBody ReceiveMoneyRequestDto req, HttpServletRequest request) {
-        System.out.println("=================================== INCOMING ISO MSG ===================================");
-        System.out.println("Authorization header: "+request.getHeader("Authorization"));
-        System.out.println("processingCode: "+ req.getProcessingCode());
-        System.out.println("pan: " + req.getPan());
-        System.out.println("txnAmount: " + req.getTxnAmount());
-        System.out.println("currency: " + req.getCurrency());
-        System.out.println("txnTransmissionDate: " + req.getTransmissionDateTime());
-        System.out.println("tid: " + req.getTid());
-        System.out.println("mid: " + req.getMid());
-        System.out.println("receiveMoneyToken: "+req.getReceiveMoneyToken());
-        System.out.println("=================================== INCOMING ISO MSG ===================================");
-        ReceiveMoneyResponseDto resp = null;
+        log.info("Incoming receive money request: processingCode={}, pan={}, amount={}, currency={}, transmissionDate={}, tid={}, mid={}",
+                req.getProcessingCode(), req.getPan(), req.getTxnAmount(), req.getCurrency(), req.getTransmissionDateTime(), req.getTid(), req.getMid());
+        ReceiveMoneyResponseDto resp = new ReceiveMoneyResponseDto();
 
         try {
             resp = receiveMoneyService.receiveMoney(req);
         } catch (Exception ex){
-            System.out.println("ERROR MESSAGE: "+ex.getMessage());
-            ex.printStackTrace();
+            LogUtil.logException(log, "Failed to process receive money transaction", ex);
             resp.setMessage("96");
         }
         return resp;

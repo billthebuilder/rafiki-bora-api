@@ -1,8 +1,15 @@
 package rafikibora.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -15,23 +22,21 @@ import rafikibora.dto.ListSystemUser;
 import rafikibora.dto.SystemUser;
 import rafikibora.dto.TerminalAssignmentRequest;
 import rafikibora.dto.TerminalToAgentResponse;
-import rafikibora.exceptions.AddNewUserException;
 import rafikibora.exceptions.BadRequestException;
 import rafikibora.model.users.User;
 import rafikibora.services.UserService;
 import rafikibora.services.UserServiceI;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
 @RestController
 @RequestMapping("api/users")
 @Slf4j
+@Tag(name = "Users", description = "Operations related to user management")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     @Autowired
     private UserServiceI userServiceI;
@@ -40,7 +45,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/createuser")
-    public ResponseEntity<?> addUser(@RequestBody User user){
+    @Operation(summary = "Create user", description = "Create a new system user with a role assigned")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created"),
+            @ApiResponse(responseCode = "400", description = "Missing role or invalid request",
+                    content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<?> addUser(@RequestBody @Parameter(description = "User payload") User user){
         if(user.getRole() == null)
             throw new BadRequestException("User has to have an assigned role");
         userServiceI.addUser(user);
@@ -56,6 +67,7 @@ public class UserController {
      * @see UserService#findByName(String) UserService.findByName(authenticated user)
      */
     @GetMapping(value = "/user/profile",produces = {"application/json"})
+    @Operation(summary = "Get current user profile", description = "Returns the profile of the authenticated user")
     public ResponseEntity<?> getCurrentUserInfo(Authentication authentication) {
         User user = userServiceI.findByName(authentication.getName());
         return new ResponseEntity<>(user,
@@ -63,7 +75,8 @@ public class UserController {
     }
 
     @PostMapping("/user/approve/{email}")
-    public ResponseEntity<?> approve(@PathVariable("email") String email){
+    @Operation(summary = "Approve user", description = "Approve a user account by email")
+    public ResponseEntity<?> approve(@PathVariable("email") @Parameter(description = "User email") String email){
 
         User approvedUser = userServiceI.approveUser(email);
 
@@ -71,12 +84,14 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable @Param("id") long id) {
+    @Operation(summary = "Delete user", description = "Delete a user by id")
+    public ResponseEntity<?> deleteUser(@PathVariable @Param("id") @Parameter(description = "User id") long id) {
         return userService.deleteUser(id);
     }
 
     @GetMapping("/{roleName}")
-    public void findUserByRoles(@PathVariable("roleName") String roleName, HttpServletResponse response) throws IOException {
+    @Operation(summary = "Find users by role", description = "List users that have the specified role name")
+    public void findUserByRoles(@PathVariable("roleName") @Parameter(description = "Role name") String roleName, HttpServletResponse response) throws IOException {
         List<User> users = userServiceI.getUserByRole(roleName);
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode jsonNodes = mapper.createObjectNode();
@@ -92,6 +107,7 @@ public class UserController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "List users", description = "Returns all users")
     public void findAllUsers(HttpServletResponse response) throws IOException {
         List<User> users = userServiceI.viewUsers();
         ObjectMapper mapper = new ObjectMapper();
@@ -109,18 +125,21 @@ public class UserController {
 
     //find user by the Id
     @GetMapping("user/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable @Param("id") int id) {
+    @Operation(summary = "Get user by id", description = "Returns a single user by id")
+    public ResponseEntity<User> findUserById(@PathVariable @Param("id") @Parameter(description = "User id") int id) {
         return (ResponseEntity<User>) userService.getUserById(id);
     }
 
     @PostMapping("/addagent")
-    public void addAgent (@RequestBody User user){
+    @Operation(summary = "Add agent", description = "Create a new agent user")
+    public void addAgent (@RequestBody @Parameter(description = "Agent user payload") User user){
          userServiceI.addAgent(user);
     }
 
 
     @PostMapping(value = "/assignmerchantterminal")
-    public ResponseEntity<?> assignmerchantterminal(@RequestBody TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
+    @Operation(summary = "Assign terminal to merchant", description = "Assign one or more terminals to a merchant")
+    public ResponseEntity<?> assignmerchantterminal(@RequestBody @Parameter(description = "Terminal assignment request") TerminalAssignmentRequest terminalAssignmentRequest) throws Exception {
        userServiceI.assignTerminals(terminalAssignmentRequest);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -128,14 +147,16 @@ public class UserController {
 
 
     @PatchMapping(value = "/{id}", consumes = {"application/json"})
-    public ResponseEntity<?> updateAccount(@RequestBody User user, @PathVariable int id) {
+    @Operation(summary = "Update user", description = "Update an existing user by id")
+    public ResponseEntity<?> updateAccount(@RequestBody @Parameter(description = "Updated user payload") User user, @PathVariable @Parameter(description = "User id") int id) {
         userServiceI.updateUser(user, id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/agenttoterminal")
-        public ResponseEntity<?> terminalToAgent(@RequestBody TerminalToAgentResponse terminalToAgentResponse) throws Exception {
+    @Operation(summary = "Assign terminal to agent", description = "Assign one or more terminals to an agent")
+        public ResponseEntity<?> terminalToAgent(@RequestBody @Parameter(description = "Agent to terminal assignment") TerminalToAgentResponse terminalToAgentResponse) throws Exception {
         userServiceI.assignTerminalsToAgent(terminalToAgentResponse);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -143,12 +164,14 @@ public class UserController {
     }
 
     @GetMapping("id/{id}")
-    public User findById(@PathVariable("id") long id) {
+    @Operation(summary = "Find by id", description = "Returns user by id")
+    public User findById(@PathVariable("id") @Parameter(description = "User id") long id) {
         return userService.getUserById(id);
     }
 
 
     @GetMapping("/unAssignedAgents")
+    @Operation(summary = "Unassigned agents", description = "List agents that are not assigned to a terminal")
     public List<User> unAssignedAgents(){
         return userService.unAssignedAgents();
     }

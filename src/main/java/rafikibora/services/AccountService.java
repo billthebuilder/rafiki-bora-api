@@ -1,12 +1,13 @@
 package rafikibora.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.Response;
 import rafikibora.exceptions.ResourceNotFoundException;
 import rafikibora.model.account.Account;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import rafikibora.repository.AccountRepository;
 
 import java.util.List;

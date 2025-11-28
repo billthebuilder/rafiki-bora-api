@@ -2,20 +2,15 @@ package rafikibora.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rafikibora.dto.CustomUserDetails;
 import rafikibora.dto.SupportDto;
-import rafikibora.dto.TerminalDto;
 import rafikibora.model.support.Support;
-import rafikibora.model.terminal.Terminal;
 import rafikibora.repository.SupportRepository;
-import rafikibora.repository.TerminalRepository;
 
-import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;

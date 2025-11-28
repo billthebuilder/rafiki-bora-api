@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import rafikibora.exceptions.InvalidTokenException;
+import lombok.extern.slf4j.Slf4j;
+import rafikibora.handlers.LogUtil;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -14,6 +15,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class JwtProvider implements JwtProviderI {
     @Value("${rafiki-bora.auth.tokenSecret}")
     private String tokenSecret;
@@ -82,7 +84,7 @@ public class JwtProvider implements JwtProviderI {
             Jwts.parser().setSigningKey(tokenSecret).parse(token);
             return true;
         } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
-            ex.printStackTrace();
+            LogUtil.logException(log, "Invalid JWT encountered during validation", ex);
         }
         return false;
     }

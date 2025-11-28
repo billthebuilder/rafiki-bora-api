@@ -1,13 +1,13 @@
 package rafikibora.services;
 
 import org.springframework.http.ResponseEntity;
-import rafikibora.dto.*;
-import rafikibora.model.account.Account;
-import rafikibora.model.terminal.Terminal;
+import rafikibora.dto.AuthenticationResponse;
+import rafikibora.dto.LoginRequest;
+import rafikibora.dto.TerminalAssignmentRequest;
+import rafikibora.dto.TerminalToAgentResponse;
 import rafikibora.model.users.User;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserServiceI {
 

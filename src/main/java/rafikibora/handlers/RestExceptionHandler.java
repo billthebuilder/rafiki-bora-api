@@ -5,6 +5,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -43,7 +44,7 @@ public class RestExceptionHandler
             Exception ex,
             Object body,
             HttpHeaders headers,
-            HttpStatus status,
+            HttpStatusCode status,
             WebRequest request)
     {
         ErrorDetail errorDetail = new ErrorDetail();
@@ -57,7 +58,7 @@ public class RestExceptionHandler
 
         return new ResponseEntity<>(errorDetail,
                 null,
-                status);
+                HttpStatus.valueOf(status.value()));
     }
 
     /** Handles ResourceNotFoundException */

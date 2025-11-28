@@ -1,27 +1,30 @@
 package rafikibora.security.conf;
 
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import rafikibora.exceptions.InvalidTokenException;
-import rafikibora.services.CustomUserDetailsService;
-import rafikibora.services.JwtProviderI;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import rafikibora.services.CustomUserDetailsService;
+import rafikibora.services.JwtProviderI;
+import rafikibora.handlers.LogUtil;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Slf4j
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtProviderI jwtProvider;
@@ -42,11 +45,31 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new InvalidTokenException("Invalid token: " + ex.getMessage());
+            LogUtil.logException(log, "Token authentication filter encountered an exception while processing request", ex);
+            // For non-whitelisted endpoints, an invalid token should ultimately result in 401.
+            // However, throwing here would also break permitAll endpoints if a header is present.
+            // So, just proceed without setting authentication; security will enforce auth where required.
         }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String uri = request.getRequestURI();
+
+        // Allow CORS preflight requests to pass through without authentication
+        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+            return true;
+        }
+
+        // Whitelist Swagger/OpenAPI endpoints and static assets
+        return uri.startsWith("/v3/api-docs")
+                || uri.startsWith("/swagger-ui/")
+                || "/swagger-ui.html".equals(uri)
+                || uri.startsWith("/api/auth/")
+                || uri.startsWith("/actuator")
+                || uri.startsWith("/error");
     }
 
     // Gets the token from the incoming request

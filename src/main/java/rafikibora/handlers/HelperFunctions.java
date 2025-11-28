@@ -1,10 +1,10 @@
 package rafikibora.handlers;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 import rafikibora.model.ValidationError;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,22 +2,19 @@ package rafikibora.model.terminal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.User;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApiModel(value = "Terminal", description="Terminals record")
 @Entity
 @Table(name = "terminals")
 @Data

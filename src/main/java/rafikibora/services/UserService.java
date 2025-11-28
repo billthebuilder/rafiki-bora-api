@@ -1,5 +1,6 @@
 package rafikibora.services;
 
+import jakarta.persistence.EntityExistsException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,6 @@ import rafikibora.repository.TerminalRepository;
 import rafikibora.repository.UserRepository;
 import rafikibora.security.util.exceptions.RafikiBoraException;
 
-import javax.persistence.EntityExistsException;
 import java.util.*;
 import java.util.stream.Collectors;
 

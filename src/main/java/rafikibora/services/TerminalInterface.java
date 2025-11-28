@@ -1,10 +1,4 @@
 package rafikibora.services;
-import org.springframework.web.bind.annotation.RequestBody;
-import rafikibora.dto.TerminalDto;
-import rafikibora.model.terminal.Terminal;
-
-import java.util.List;
-
 
 public interface TerminalInterface {
 //    String createTID();

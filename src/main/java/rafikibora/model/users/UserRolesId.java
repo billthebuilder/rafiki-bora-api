@@ -1,6 +1,7 @@
 package rafikibora.model.users;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
+
 import java.io.Serializable;
 
 /**

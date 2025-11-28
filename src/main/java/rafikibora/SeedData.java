@@ -1,21 +1,20 @@
 
 package rafikibora;
-        import lombok.AllArgsConstructor;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.boot.CommandLineRunner;
-        import org.springframework.security.crypto.password.PasswordEncoder;
-        import org.springframework.stereotype.Component;
-        import org.springframework.transaction.annotation.Transactional;
-        import rafikibora.model.account.Account;
-        import rafikibora.model.terminal.Terminal;
-        import rafikibora.model.transactions.Transaction;
-        import rafikibora.model.users.Role;
-        import rafikibora.model.users.User;
-        import rafikibora.model.users.UserRoles;
-        import rafikibora.repository.*;
 
-        import java.time.LocalDateTime;
-        import java.util.Date;
+import lombok.AllArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import rafikibora.model.account.Account;
+import rafikibora.model.terminal.Terminal;
+import rafikibora.model.transactions.Transaction;
+import rafikibora.model.users.Role;
+import rafikibora.model.users.User;
+import rafikibora.model.users.UserRoles;
+import rafikibora.repository.*;
+
+import java.util.Date;
 
 
 /**

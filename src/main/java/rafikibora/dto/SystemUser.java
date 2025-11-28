@@ -2,8 +2,6 @@ package rafikibora.dto;
 
 import lombok.Data;
 import rafikibora.model.users.User;
-
-import java.util.Date;
 @Data
 public class SystemUser {
         private String firstName;

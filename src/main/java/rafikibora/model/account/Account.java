@@ -2,20 +2,20 @@ package rafikibora.model.account;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import rafikibora.model.transactions.Transaction;
 import rafikibora.model.users.User;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApiModel(value = "Account", description="Accunts record")
 @Getter
 @Setter
 @AllArgsConstructor

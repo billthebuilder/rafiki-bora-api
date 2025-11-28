@@ -6,13 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rafikibora.dto.SupportDto;
-import rafikibora.dto.TerminalDto;
 import rafikibora.model.support.Support;
-import rafikibora.model.terminal.Terminal;
 import rafikibora.repository.SupportRepository;
-import rafikibora.repository.TerminalRepository;
 import rafikibora.services.SupportService;
-import rafikibora.services.TerminalService;
 
 import java.util.List;
 @RestController

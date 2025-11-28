@@ -9,31 +9,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rafikibora.dto.SaleDto;
 import rafikibora.services.SaleService;
+import lombok.extern.slf4j.Slf4j;
+import rafikibora.handlers.LogUtil;
 
 
 @RestController
 @RequestMapping("/api/transactions/sale")
+@Slf4j
 public class SaleController {
     @Autowired
      private SaleService saleService;
 
     @PostMapping
     public ResponseEntity<?> createSale(@RequestBody SaleDto saleDto) {
-        System.out.println("=========== Sale request received =======");
-        System.out.println("pan: "+saleDto.getPan());
-        System.out.println("processingCode: "+saleDto.getProcessingCode());
-        System.out.println("amount: "+saleDto.getAmountTransaction());
-        System.out.println("terminal: "+saleDto.getTerminal());
-        System.out.println("merchant: "+saleDto.getMerchant());
-        System.out.println("currency: "+saleDto.getCurrencyCode());
-        System.out.println("=========== Sale request received =======");
+        log.info("Sale request received: pan={}, processingCode={}, amount={}, terminal={}, merchant={}, currency={}",
+                saleDto.getPan(), saleDto.getProcessingCode(), saleDto.getAmountTransaction(),
+                saleDto.getTerminal(), saleDto.getMerchant(), saleDto.getCurrencyCode());
 
         boolean status;
         try{
             saleService.performSale(saleDto);
             status = true;
         }catch (Exception ex){
-            ex.printStackTrace();
+            LogUtil.logException(log, "Error performing sale transaction", ex);
             status = false;
         }
         if(status){

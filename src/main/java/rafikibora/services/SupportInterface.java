@@ -1,13 +1,6 @@
 package rafikibora.services;
 
 
-import rafikibora.dto.SupportDto;
-
-import rafikibora.model.support.Support;
-
-import java.util.List;
-
-
 public interface SupportInterface {
 //    String createTID();
 //    Support save(Support support);

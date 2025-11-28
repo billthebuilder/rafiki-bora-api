@@ -2,24 +2,20 @@ package rafikibora.model.transactions;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import rafikibora.model.account.Account;
 import rafikibora.model.terminal.Terminal;
 import rafikibora.model.users.User;
 
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//@ApiModel(value = "Transaction", description="Transaction record - holds entire transaction data")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,14 +1,14 @@
 package rafikibora.services;
 
 import lombok.AllArgsConstructor;
-import rafikibora.dto.CustomUserDetails;
-import rafikibora.exceptions.ResourceNotFoundException;
-import rafikibora.repository.UserRepository;
-import rafikibora.model.users.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import rafikibora.dto.CustomUserDetails;
+import rafikibora.exceptions.ResourceNotFoundException;
+import rafikibora.model.users.User;
+import rafikibora.repository.UserRepository;
 
 @Service
 @AllArgsConstructor
