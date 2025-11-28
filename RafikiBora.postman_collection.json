@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "67d7122b-2b3c-43d4-a287-7972aea6d527",
+		"name": "RafikiBora",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5176138",
+		"_collection_link": "https://bold-astronaut-273942.postman.co/workspace/My-Workspace~83e58b04-a4be-4790-89b8-1b3ae5991550/collection/5176138-67d7122b-2b3c-43d4-a287-7972aea6d527?action=share&source=collection_link&creator=5176138"
+	},
+	"item": [
+		{
+			"name": "Signup User",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+    "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n  \"firstName\": \"Ava\",\r\n  \"lastName\": \"Ngugi\",\r\n  \"email\": \"ava.ngugi@example.com\",\r\n  \"username\": \"ava.ngugi@example.com\",\r\n  \"password\": \"P@ssw0rd!2025\",\r\n  \"phoneNo\": \"+254700123456\",\r\n  \"role\": \"ADMIN\"\r\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+				"url": {
+					"raw": "{{local}}/api/users/createuser",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"createuser"
+					]
+				},
+				"description": "Signup User"
+			},
+			"response": []
+		},
+		{
+			"name": "GET user Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/api/users/user/profile",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"user",
+						"profile"
+					]
+				},
+				"description": "GET user Profile"
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(pm.response.code === 200 ){\r",
+							"    pm.environment.set('token', pm.response.json().authToken)\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+    "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n  \"email\": \"admin@example.com\",\r\n  \"password\": \"P@ssw0rd!2025\"\r\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+				"url": {
+					"raw": "{{local}}/api/auth/login",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				},
+				"description": "Login User"
+			},
+			"response": []
+		},
+		{
+			"name": "Approve User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+    "url": {
+                    "raw": "{{local}}/api/users/user/approve/?email=user.to.approve@example.com",
+                    "host": [
+                        "{{local}}"
+                    ],
+                    "path": [
+                        "api",
+                        "users",
+                        "user",
+                        "approve",
+                        ""
+                    ],
+                    "query": [
+                        {
+                            "key": "email",
+                            "value": "user.to.approve@example.com"
+                        }
+                    ]
+                },
+                "description": "Approve User"
+            },
+			"response": []
+		},
+		{
+			"name": "Create Role",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+    "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n  \"roleName\": \"MANAGER\"\r\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+				"url": {
+					"raw": "{{local}}/api/roles",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"roles"
+					]
+				},
+				"description": "Create Role"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Terminals",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/api/terminals",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"terminals"
+					]
+				},
+				"description": "Get All Terminals"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Terminal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+    "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n  \"modelType\": \"IWL250\",\r\n  \"serialNo\": \"SN-002222\"\r\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+				"url": {
+					"raw": "{{local}}/api/terminals",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"terminals"
+					]
+				},
+				"description": "Create Terminal"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/api/users",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				},
+				"description": "Get All Users"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+    "url": {
+                    "raw": "{{local}}/api/users/123",
+                    "host": [
+                        "{{local}}"
+                    ],
+                    "path": [
+                        "api",
+                        "users",
+                        "123"
+                    ]
+                },
+                "description": "Delete User"
+            },
+			"response": []
+		},
+		{
+			"name": "Get All Transactions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/api/transactions/all",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"transactions",
+						"all"
+					]
+				},
+				"description": "Get All Transactions"
+			},
+			"response": []
+		}
+	]
+}
